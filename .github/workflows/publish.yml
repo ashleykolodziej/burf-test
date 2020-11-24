@@ -16,7 +16,7 @@ jobs:
         uses: EndBug/version-check@v1.6.0
         id: check
         with:
-          file-name: ./burf-base/package.json
+          file-name: burf-base/package.json
       - name: Check version
         if: steps.check.outputs.changed == 'true'
         run: 'echo "New version of burf-base detected: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
