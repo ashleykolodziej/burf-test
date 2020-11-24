@@ -19,7 +19,8 @@ jobs:
           file-name: ./burf-base/package.json
           file-url: https://raw.githubusercontent.com/ashleykolodziej/burf-test/master/burf-base/package.json
           static-checking: localIsNew
-          run: 'echo "${{ steps.check.outputs.changed }}"'
+      - name: Debug
+        run: 'echo "${{ steps.check.outputs.changed }}"'
       - name: Check version
         if: steps.check.outputs.changed == 'true'
         run: 'echo "New version of burf-base detected: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
