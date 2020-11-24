@@ -18,17 +18,18 @@ jobs:
         with:
           file-name: ./burf-base/package.json
       - name: Check version
-        steps:
-          if: steps.check.outputs.changed == 'true'
-          run: 'echo "New version of burf-base detected: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
-      - name: Install dependencies & Publish
-          steps:
-            if: steps.check.outputs.changed == 'true'
-            run: npm install --production
-            run: npm publish burf-base
-            env:
-              NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: steps.check.outputs.changed !== 'true'
+        if: steps.check.outputs.changed == 'true'
+        run: 'echo "New version of burf-base detected: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+      - name: Install Dependencies
+        if: steps.check.outputs.changed == 'true'
+        run: npm install --production
+      - name: Publish
+        if: steps.check.outputs.changed == 'true'
+        run: npm publish burf-base
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: My backup step
+        if: ${{ failure() }}
         run: 'echo "No new version of burf-base detected. Continuing on..."'
   package:
     runs-on: ubuntu-latest
