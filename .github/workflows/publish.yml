@@ -18,6 +18,7 @@ jobs:
         with:
           file-name: ./burf-base/package.json
           file-url: https://raw.githubusercontent.com/ashleykolodziej/burf-test/master/burf-base/package.json
+          diff-search: true
           static-checking: localIsNew
       - name: Debug
         run: 'echo "${{ steps.check.outputs.changed }}"'
