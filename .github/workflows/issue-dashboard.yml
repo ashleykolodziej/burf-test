@@ -3,7 +3,7 @@ on:
   release:
     types: [created]
 jobs:
-  build:
+  build-tools:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
       - run: npm publish burf-tools
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  build:
+  build-base:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
