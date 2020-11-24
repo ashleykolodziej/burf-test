@@ -22,8 +22,6 @@
     "directory": "burf-tools"
   },
   "dependencies": {
-    "mathsass": "^0.10.1",
-    "normalize-scss": "^7.0.1",
-    "kss": "^3.0.0-beta.25"
+    "@ashleykolodziej/burf-base": "0.0.2"
   }
 }
