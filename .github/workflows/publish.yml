@@ -1,4 +1,4 @@
-name: Package burf-base
+name: Publish Packages
 on:
   release:
     types: [created]
