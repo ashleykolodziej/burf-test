@@ -14,5 +14,6 @@ jobs:
           scope: '@ashleykolodziej'
       - run: npm install --production
       - run: npm publish burf-tools
+      - run: npm publish burf-base
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
