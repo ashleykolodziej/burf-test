@@ -1,0 +1,73 @@
+// =================================================================
+// Styling for the WordPress theme framework
+//
+// BURF Theme contains styles that work with the Boston University
+// WordPress environment. If you're not using WordPress for your
+// project, you probably don't need these styles. You can import
+// just BURF Base for special situations where you don't need all
+// the extra styling to support WordPress.
+//
+// =================================================================
+
+// =================================================================
+// Global dependencies
+// =================================================================
+
+@import '../burf-base/burf-base';
+
+// =================================================================
+// Content and Shortcodes
+// =================================================================
+
+@import 'content/wordpress-editor';
+@import 'content/collapsibles';
+@import 'content/courses';
+@import 'content/galleries';
+@import 'profiles/profile-format-default';
+@import 'profiles/profile-format-basic';
+@import 'profiles/profile-format-advanced';
+@import 'profiles/profile-format-mini';
+@import 'content/slideshows';
+
+// =================================================================
+// Widgets
+// =================================================================
+
+@import 'widgets/widgets';
+@import 'calendar/widget-calendar';
+@import 'calendar/calendar-picker';
+@import 'widgets/widget-navigation';
+@import 'widgets/widget-posts';
+
+// =================================================================
+// Layout
+// =================================================================
+
+@import 'layout/branding';
+@import 'layout/navigation';
+@import 'layout/banner';
+@import 'layout/content-area';
+@import 'layout/footer';
+
+// =================================================================
+// Templates
+// =================================================================
+
+@import 'news/base';
+@import 'news/comments';
+
+// Archive Templates
+
+@import 'news/archive';
+@import 'calendar/calendar-archive';
+@import 'profiles/profile-archive';
+
+// Single Templates
+
+@import 'news/single';
+@import 'calendar/calendar-single';
+@import 'profiles/profile-single';
+
+// Other
+
+@import 'bulp/bulp-base';
