@@ -3,6 +3,31 @@ on:
   release:
     types: [created]
 jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@ashleykolodziej'
+      - name: Check version changes
+          uses: EndBug/version-check@v1
+          id: check
+          with:
+            file-name: ./burf-base/package.json
+      - name: Check version
+        if: steps.check.outputs.changed == 'true'
+        run: 'echo "New version of burf-base detected: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+      - name: Install dependencies & Publish
+        if: steps.check.outputs.changed == 'true'
+        run: npm install --production
+        run: npm publish burf-base
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.check.outputs.changed !== 'true'
+        run: 'echo "No new version of burf-base detected. Continuing on..."'
   package:
     runs-on: ubuntu-latest
     steps:
@@ -13,6 +38,6 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@ashleykolodziej'
       - run: npm install --production
-      - run: npm publish burf-base
+      - run: npm publish burf-tools
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
