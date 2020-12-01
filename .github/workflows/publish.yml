@@ -31,8 +31,7 @@ jobs:
             }
           owner: ${{ github.event.repository.owner.name }}
           repo: ${{ github.event.repository.name }}
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: "echo 'latest release: ${{ steps.check.outputs.data }}'"
       - name: Check version
         if: steps.check.outputs.changed == 'true'
