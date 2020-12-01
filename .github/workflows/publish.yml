@@ -12,12 +12,12 @@ jobs:
           query: |
             query release($owner:String!,$repo:String!) {
               repository(owner:$owner,name:$repo) {
-                releases(first:1) {
+                packages(last: 3, names: ["burf-base", "burf-theme", "burf-tools"]) {
                   nodes {
                     name
-                    createdAt
-                    tagName
-                    description
+                    latestVersion {
+                      version
+                    }
                   }
                 }
               }
