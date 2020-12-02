@@ -43,7 +43,7 @@ jobs:
       - name: Read node from package.json
         uses: culshaw/read-package-node-version-actions@v1
         with: 
-          path: "./burf-base/"
+          path: "burf-base/package.json"
         id: current-version-burf-base
       - name: Get current version
         run: 'echo "${{ steps.current-version-burf-base.outputs.data }}"'
