@@ -31,7 +31,7 @@ jobs:
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].latestVersion.version }}'
-  publish burf-base:
+  publish base:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
