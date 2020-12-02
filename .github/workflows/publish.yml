@@ -41,9 +41,9 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@ashleykolodziej'   
       - name: Extract version
-        uses: Saionaro/extract-package-version@v1.1.1
-        with:
-          path: burf-base
+        uses: culshaw/read-package-node-version-actions@v1
+        with: 
+          path: "./burf-base"
         id: current-version-burf-base
       - name: Get current version
         run: 'echo "${{ steps.current-version-burf-base.outputs.version }}"'
