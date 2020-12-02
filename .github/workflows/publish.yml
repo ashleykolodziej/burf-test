@@ -26,6 +26,7 @@ jobs:
           repo: ${{ github.event.repository.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: "echo '${{ steps.get_latest_release.outputs.data.repository }}'"
       - run: "echo 'Current package version for ${{ steps.get_latest_release.outputs.data.repository.packages.nodes[0].name }}: ${{ steps.get_latest_release.outputs.data.repository.packages.nodes[0].latestVersion.version }}'"
       - run: "echo 'Current package version for ${{ steps.get_latest_release.outputs.data.repository.packages.nodes[1].name }}: ${{ steps.get_latest_release.outputs.data.repository.packages.nodes[1].latestVersion.version }}'"
       - run: "echo 'Current package version for ${{ steps.get_latest_release.outputs.data.repository.packages.nodes[2].name }}: ${{ steps.get_latest_release.outputs.data.repository.packages.nodes[2].latestVersion.version }}'"
