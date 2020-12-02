@@ -3,14 +3,14 @@ on:
   release:
     types: [created]
 jobs:  
-  logLatestRelease:
+  getPackages:
     runs-on: ubuntu-latest
     steps:
       - uses: octokit/graphql-action@v2.x
-        id: get_latest_release
+        id: get_latest_package
         with:
           query: |
-            query release($owner:String!,$repo:String!) {
+            query packages($owner:String!,$repo:String!) {
               repository(owner:$owner,name:$repo) {
                 packages(last: 3, names: ["burf-base", "burf-theme", "burf-tools"]) {
                   nodes {
@@ -27,11 +27,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          echo '${{ steps.get_latest_release.outputs.data }}'
-          echo 'Current package version for ${{ fromJSON(steps.get_latest_release.outputs.data).repository.packages.nodes[0].name }}: ${{ fromJSON(steps.get_latest_release.outputs.data).repository.packages.nodes[0].latestVersion.version }}'
-          echo 'Current package version for ${{ fromJSON(steps.get_latest_release.outputs.data).repository.packages.nodes[1].name }}: ${{ fromJSON(steps.get_latest_release.outputs.data).repository.packages.nodes[1].latestVersion.version }}'
-          echo 'Current package version for ${{ fromJSON(steps.get_latest_release.outputs.data).repository.packages.nodes[2].name }}: ${{ fromJSON(steps.get_latest_release.outputs.data).repository.packages.nodes[2].latestVersion.version }}'
-  publish:
+          echo '${{ steps.get_latest_package.outputs.data }}'
+          echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}'
+          echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}'
+          echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].latestVersion.version }}'
+  publish burf-base:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,10 +39,17 @@ jobs:
         with:
           node-version: '12.x'
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@ashleykolodziej'
+          scope: '@ashleykolodziej'   
+      - name: Read node from package.json
+        uses: culshaw/read-package-node-version-actions@v1
+        with: 
+          path: "./burf-base/package.json"
+        id: current-version-burf-base
+      - name: Get current version
+        run: 'echo "${{ steps.current-version-burf-base.outputs.data }}"'
       - name: Check version
-        if: steps.check.outputs.changed == 'true'
-        run: 'echo "New version of burf-base detected: ${{ steps.check.outputs.version }} (${{ steps.check.outputs.type }})"'
+        if: steps.check.outputs.changed == ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
+        run: 'echo "New version of burf-base detected: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}"'
       - name: Install Dependencies
         if: steps.check.outputs.changed == 'true'
         run: npm install --production
@@ -54,16 +61,3 @@ jobs:
       - name: My backup step
         if: ${{ failure() }}
         run: 'echo "No new version of burf-base detected. Continuing on..."'
-  package:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@ashleykolodziej'
-      - run: npm install --production
-      - run: npm publish burf-tools
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
