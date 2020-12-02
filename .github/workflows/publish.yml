@@ -3,7 +3,7 @@ on:
   release:
     types: [created]
 jobs:  
-  getPackages:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: octokit/graphql-action@v2.x
@@ -31,9 +31,6 @@ jobs:
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].latestVersion.version }}'
-  publish:
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
