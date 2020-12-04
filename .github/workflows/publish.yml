@@ -53,5 +53,5 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: My backup step
-        if: ${{ !fromJSON(steps.package.outputs.content).version != fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
+        if: ${{ fromJSON(steps.package.outputs.content).version == fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
         run: 'echo "::warning file=package.json,line=3::No new version of burf-base detected. Continuing on..."'
