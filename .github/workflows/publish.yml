@@ -44,15 +44,12 @@ jobs:
           path: ./burf-base/package.json
       - name: Echo package.json
         run: 'echo "Latest version: ${{ fromJSON(steps.package.outputs.content).version }}"'
-      - name: Check version
-        if: ${{ fromJSON(steps.package.outputs.content).version != fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
-        run: 'echo "New version of burf-base detected: ${{ fromJSON(steps.package.outputs.content).version }}   ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}"'
-      - name: Install Dependencies
-        if: (${{ fromJSON(steps.package.outputs.content).version }} != ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }})
-        run: npm install --production
       - name: Publish
-        if: (${{ fromJSON(steps.package.outputs.content).version }} != ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }})
-        run: npm publish burf-base
+        if: ${{ fromJSON(steps.package.outputs.content).version != fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
+        run: |
+          echo "New version of burf-base detected: ${{ fromJSON(steps.package.outputs.content).version }}   ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}"
+          npm install --production
+          run: npm publish burf-base
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: My backup step
