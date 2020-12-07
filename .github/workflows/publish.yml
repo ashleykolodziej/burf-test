@@ -41,7 +41,9 @@ jobs:
         with:
           path: burf-base/package.json    
       - name: Echo package.json
-        run: 'echo "Latest version: ${{ fromJSON(steps.burf-base-release.outputs.content).version }}"'
+        run: |
+          echo 'Data: ${{ steps.burf-base-release.outputs.content }}'
+          echo 'Latest version: ${{ fromJSON(steps.burf-base-release.outputs.content).version }}'
   publish:
     needs: [ getPackages, getReleases ]
     runs-on: ubuntu-latest
