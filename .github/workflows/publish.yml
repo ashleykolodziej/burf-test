@@ -29,9 +29,21 @@ jobs:
           owner: 'ashleykolodziej'
           repo: ${{ github.event.repository.name }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+  getReleases:
+    runs-on: ubuntu-latest
+    outputs:
+      burf-base-version: ${{ fromJSON(steps.burf-base-release.outputs.content).version }}
+    steps:
+      - name: Read burf-base package.json
+        id: burf-base-release
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./burf-base/package.json    
+      - name: Echo package.json
+        run: 'echo "Latest version: ${{ fromJSON(steps.burf-base-release.outputs.content).version }}"'
   publish:
-    needs: getPackages
+    needs: [ getPackages, getReleases ]
     runs-on: ubuntu-latest
     steps:
       - name: Print Version
@@ -45,21 +57,14 @@ jobs:
           node-version: '12.x'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@ashleykolodziej'   
-      - name: Read package.json
-        id: package
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./burf-base/package.json
-      - name: Echo package.json
-        run: 'echo "Latest version: ${{ fromJSON(steps.package.outputs.content).version }}"'
-      - id: publish-base
-        if: ${{ fromJSON(steps.package.outputs.content).version != needs.getPackages.outputs.burf-base-version }}
+      - name: Publish burf-base
+        if: ${{ needs.getReleases.outputs.burf-base-version != needs.getPackages.outputs.burf-base-version }}
         run: |
-          echo "New version of burf-base detected: ${{ fromJSON(steps.package.outputs.content).version }}. Old version: ${{ needs.getPackages.outputs.burf-base-version }}. Publishing now..."
+          echo "New version of burf-base detected: ${{ needs.getReleases.outputs.burf-base-version }}. Old version: ${{ needs.getPackages.outputs.burf-base-version }}. Publishing now..."
           npm install --production
           npm publish burf-base
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - id: backup
-        if: ${{ fromJSON(steps.package.outputs.content).version == needs.getPackages.outputs.burf-base-version }}
+      - name: Skip publishing burf-base
+        if: ${{ needs.getReleases.outputs.burf-base-version == needs.getPackages.outputs.burf-base-version }}
         run: 'echo "::warning file=package.json,line=3::No new version of burf-base detected. Continuing on..."'
