@@ -3,7 +3,7 @@ on:
   release:
     types: [created]
 jobs:  
-  fetchPackageVersions:
+  getPackageVersions:
     runs-on: ubuntu-latest
     outputs:
       burf-base-version: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
@@ -31,15 +31,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   publish:
-    needs: fetchPackageVersions
+    needs: getPackageVersions
     runs-on: ubuntu-latest
     steps:
       - name: Print Version
         run: |
-          echo ${{ needs.versions.outputs.burf-base-version }}
-          echo 'Current package version for burf-base: ${{ needs.fetchPackageVersions.outputs.burf-base-version }}'
-          echo 'Current package version for burf-theme: ${{ needs.fetchPackageVersions.outputs.burf-theme-version }}'
-          echo 'Current package version for burf-tools: ${{ needs.fetchPackageVersions.outputs.burf-tools-version }}'
+          echo 'Current package version for burf-base: ${{ needs.getPackageVersions.outputs.burf-base-version }}'
+          echo 'Current package version for burf-theme: ${{ needs.getPackageVersions.outputs.burf-theme-version }}'
+          echo 'Current package version for burf-tools: ${{ needs.getPackageVersions.outputs.burf-tools-version }}'
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
@@ -56,11 +55,11 @@ jobs:
       - id: publish-base
         if: ${{ fromJSON(steps.package.outputs.content).version != needs.fetchPackageVersions.outputs.burf-base-version }}
         run: |
-          echo "New version of burf-base detected: ${{ fromJSON(steps.package.outputs.content).version }}. Old version: ${{ needs.fetchPackageVersions.outputs.burf-base-version }}. Publishing now..."
+          echo "New version of burf-base detected: ${{ fromJSON(steps.package.outputs.content).version }}. Old version: ${{ needs.getPackageVersions.outputs.burf-base-version }}. Publishing now..."
           npm install --production
           npm publish burf-base
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: backup
-        if: ${{ fromJSON(steps.package.outputs.content).version == fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
+        if: ${{ fromJSON(steps.package.outputs.content).version == needs.getPackageVersions.outputs.burf-base-version }}
         run: 'echo "::warning file=package.json,line=3::No new version of burf-base detected. Continuing on..."'
