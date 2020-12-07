@@ -34,9 +34,7 @@ jobs:
     needs: versions
     runs-on: ubuntu-latest
     steps:
-      - env:           
-          LATEST_PACKAGE: steps.get_latest_package.outputs.data
-        id: publish
+      - uses: actions/checkout@v2
       - name: Print Version
       - run: |
           echo ${{ needs.versions.outputs.burf-base-version }}
