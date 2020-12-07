@@ -53,14 +53,14 @@ jobs:
           path: ./burf-base/package.json
       - name: Echo package.json
         run: 'echo "Latest version: ${{ fromJSON(steps.package.outputs.content).version }}"'
-      - name: Publish burf-base
-        if: ${{ fromJSON(steps.package.outputs.content).version != ${{ needs.fetchPackageVersions.outputs.burf-base-version }}
+      - id: publish-base
+        if: ${{ fromJSON(steps.package.outputs.content).version != needs.fetchPackageVersions.outputs.burf-base-version }}
         run: |
           echo "New version of burf-base detected: ${{ fromJSON(steps.package.outputs.content).version }}. Old version: ${{ needs.fetchPackageVersions.outputs.burf-base-version }}. Publishing now..."
           npm install --production
           npm publish burf-base
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: My backup step
+      - id: backup
         if: ${{ fromJSON(steps.package.outputs.content).version == fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
         run: 'echo "::warning file=package.json,line=3::No new version of burf-base detected. Continuing on..."'
