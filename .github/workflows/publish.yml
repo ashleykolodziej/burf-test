@@ -34,9 +34,8 @@ jobs:
     needs: versions
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Print Version
-      - run: |
+        run: |
           echo ${{ needs.versions.outputs.burf-base-version }}
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}'
