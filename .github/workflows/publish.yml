@@ -35,11 +35,12 @@ jobs:
     outputs:
       burf-base-version: ${{ fromJSON(steps.burf-base-release.outputs.content).version }}
     steps:
+      - uses: actions/checkout@v2
       - name: Read burf-base package.json
         id: burf-base-release
         uses: juliangruber/read-file-action@v1
         with:
-          path: burf-base/package.json    
+          path: ./burf-base/package.json    
       - name: Echo package.json
         run: |
           echo 'Data: ${{ steps.burf-base-release.outputs.content }}'
