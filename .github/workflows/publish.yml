@@ -3,8 +3,12 @@ on:
   release:
     types: [created]
 jobs:  
-  publish:
+  versions:
     runs-on: ubuntu-latest
+    outputs:
+      burf-base-version: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}
+      burf-theme-version: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}
+      burf-tools-version: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}
     steps:
       - uses: octokit/graphql-action@v2.x
         id: get_latest_package
@@ -26,10 +30,16 @@ jobs:
           repo: ${{ github.event.repository.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish:
+    needs: versions
+    runs-on: ubuntu-latest
+    steps:
+      - env:           
           LATEST_PACKAGE: steps.get_latest_package.outputs.data
+        id: publish
+      - name: Print Version
       - run: |
-          echo ${{ env.LATEST_PACKAGE }}
-          echo ${{ steps.get_latest_package.outputs.data }}
+          echo ${{ needs.versions.outputs.burf-base-version }}
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[0].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[1].latestVersion.version }}'
           echo 'Current package version for ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].name }}: ${{ fromJSON(steps.get_latest_package.outputs.data).repository.packages.nodes[2].latestVersion.version }}'
