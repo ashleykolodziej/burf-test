@@ -43,6 +43,7 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: ./burf-base/package.json
+      - uses: actions/checkout@v2
       - name: Read burf-theme package.json
         id: burf-theme-release
         uses: juliangruber/read-file-action@v1
