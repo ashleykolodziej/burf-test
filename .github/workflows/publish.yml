@@ -120,7 +120,7 @@ jobs:
         run: |
           echo "New version of burf-tools detected: ${{ needs.getReleases.outputs.burf-tools-version }}. Old version: ${{ needs.getPackages.outputs.burf-tools-version }}. Publishing now..."
           npm install --production
-          npm publish burf-theme
+          npm publish burf-tools
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Skip publishing burf-tools
