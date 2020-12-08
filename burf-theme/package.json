@@ -1,0 +1,50 @@
+{
+  "name": "@ashleykolodziej/burf-theme",
+  "version": "0.0.68",
+  "homepage": "https://bu-ist.github.io/responsive-foundation/",
+  "description": "A sensible boilerplate and library of styles for WordPress, intended to work with the Boston University Responsive Framework parent theme.",
+  "authors": [
+    "Mike Burns <mgburns@bu.edu>",
+    "Scott Dasse <sdasse@bu.edu>",
+    "Andy Rader <jarader@bu.edu>",
+    "Matt Fredenburg <malakhi@bu.edu>",
+    "Steve Rudolfi <srudolfi@bu.edu>",
+    "Eveleen Sung <eksung@bu.edu>",
+    "Inder Singh <isingh@bu.edu>",
+    "Ashley Kolodziej <kolodz10@bu.edu>",
+    "Jon Desroisers <jondes@bu.edu>",
+    "Tom Dodson <tdodson@bu.edu>",
+    "Alana Martin <alanam@bu.edu>"
+  ],
+  "keywords": [
+    "responsive",
+    "bu",
+    "foundation",
+    "bootstrap",
+    "framework"
+  ],
+  "publishConfig": {
+    "registry":"https://npm.pkg.github.com/@ashleykolodziej"
+  },
+  "repository" : {
+    "type" : "git",
+    "url": "ssh://git@github.com:ashleykolodziej/burf-test.git",
+    "directory": "burf-theme"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "browserify-shim": {
+    "jquery": "global:jQuery"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "dependencies": {
+    "@ashleykolodziej/burf-base": "0.0.2"
+  }
+}
